@@ -34,14 +34,19 @@ export default defineSchema({
                 glosses: v.array(v.string()),
                 tags: v.array(v.string()),
                 categories: v.array(v.string()),
-                examples: v.array(v.string())
+                examples: v.array(
+                    v.object({
+                        text: v.string(),
+                        bold_text_offsets: v.string()
+                    })
+                )
             }),
         ),
     })
         .index("by_orth", ["orthographic_form"])
         .index("by_language_and_orth", ["language_code", "orthographic_form"]),
 
-    transcriptions: defineTable({
+    phonetic_transcriptions: defineTable({
         entry_id: v.id("entries"),
         source_language_id: v.id("languages"),
         source_language_code: v.string(),
