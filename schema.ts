@@ -2,17 +2,53 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
-    words: defineTable({
-        word: v.string(),
-        lang_code: v.string(),
-        lang: v.string(),
-        pos: v.string(), // part of speech
-        ipa: v.optional(v.string()),
-        form: v.array(
+    languages: defineTable({
+        language_code: v.string(),
+        name: v.string(),
+    })
+        .index("by_language_code", ['language_code']),
+
+    entries: defineTable({
+        orthographic_form: v.string(),
+        language_id: v.id("languages"),
+        language_code: v.string(),
+        part_of_speech: v.string(),
+        categories: v.array(v.string()),
+        derived: v.array(
             v.object({
-                word_id: v.id("words"),
+                form: v.string(),
+                raw_tags: v.array(v.string()),
                 tags: v.array(v.string()),
+            })
+        ),
+        etymology_texts: v.array(v.string()),
+        forms: v.array(
+            v.object({
+                entry_id: v.id("entries"),
+                tags: v.array(v.string()),
+                raw_tags: v.array(v.string()),
             }),
         ),
-    }),
+        senses: v.array(
+            v.object({
+                glosses: v.array(v.string()),
+                tags: v.array(v.string()),
+                categories: v.array(v.string()),
+                examples: v.array(v.string())
+            }),
+        ),
+    })
+        .index("by_orth", ["orthographic_form"])
+        .index("by_language_and_orth", ["language_code", "orthographic_form"]),
+
+    transcriptions: defineTable({
+        entry_id: v.id("entries"),
+        source_language_id: v.id("languages"),
+        source_language_code: v.string(),
+        target_language_id: v.id("languages"),
+        target_language_code: v.string(),
+        respelling: v.string(),
+        ipa: v.string(),
+    })
+        .index("by_source_entry_target", ["source_language_code", "entry_id", "target_language_code"])
 });
