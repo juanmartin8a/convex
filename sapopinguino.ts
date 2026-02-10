@@ -309,14 +309,14 @@ async function streamFromOpenAI(
     enqueueLine(controller, encoder, STREAM_END_MARKER);
 }
 
-export const streamSapopinguinoOptions = httpAction(async () => {
+export const sapopinguinoOptions = httpAction(async () => {
     return new Response(null, {
         status: 204,
         headers: responseHeaders(),
     });
 });
 
-export const streamSapopinguino = httpAction(async (_ctx, request) => {
+export const sapopinguino = httpAction(async (_ctx, request) => {
     if (request.method !== "POST") {
         return new Response("Method not allowed", {
             status: 405,
