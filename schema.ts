@@ -10,8 +10,7 @@ export default defineSchema({
 
     entries: defineTable({
         orthographic_form: v.string(),
-        frequency: v.string(),
-        rank: v.string(),
+        frequency: v.number(),
         language_id: v.id("languages"),
         language_code: v.string(),
 
