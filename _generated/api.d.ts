@@ -11,6 +11,7 @@
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as sapopinguino from "../sapopinguino.js";
+import type * as sapopinguinoTranslate from "../sapopinguinoTranslate.js";
 import type * as sendEmail from "../sendEmail.js";
 
 import type {
@@ -23,6 +24,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
   sapopinguino: typeof sapopinguino;
+  sapopinguinoTranslate: typeof sapopinguinoTranslate;
   sendEmail: typeof sendEmail;
 }>;
 
