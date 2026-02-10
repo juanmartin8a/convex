@@ -10,6 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
+import type * as sapopinguinoStream from "../sapopinguinoStream.js";
 import type * as sendEmail from "../sendEmail.js";
 
 import type {
@@ -21,6 +22,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
+  sapopinguinoStream: typeof sapopinguinoStream;
   sendEmail: typeof sendEmail;
 }>;
 
