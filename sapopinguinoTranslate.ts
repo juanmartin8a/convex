@@ -5,8 +5,7 @@ const STREAM_END_MARKER = "<end:)>";
 const STREAM_ERROR_MARKER = "<error:/>";
 
 type StreamRequestBody = {
-    message?: string;
-    action?: string;
+    input?: string;
 };
 
 type OpenAIStreamEvent = {
@@ -116,7 +115,7 @@ function handleDataPayload(
 }
 
 async function streamFromOpenAI(
-    message: string,
+    input: string,
     request: Request,
     controller: ReadableStreamDefaultController<Uint8Array>,
     encoder: TextEncoder,
@@ -142,7 +141,7 @@ async function streamFromOpenAI(
                 id: promptId,
                 version: promptVersion,
             },
-            input: message,
+            input: input,
             stream: true,
         }),
         signal: request.signal,
@@ -218,20 +217,20 @@ export const sapopinguinoTranslate = httpAction(async (_ctx, request) => {
         });
     }
 
-    if (typeof body.message !== "string" || body.message.length === 0) {
+    if (typeof body.input !== "string" || body.input.length === 0) {
         return new Response(formatSSEEvent("error", STREAM_ERROR_MARKER), {
             status: 400,
             headers: responseHeaders(),
         });
     }
 
-    const message = body.message;
+    const input = body.input;
     const encoder = new TextEncoder();
 
     const stream = new ReadableStream<Uint8Array>({
         start: async (controller) => {
             try {
-                await streamFromOpenAI(message, request, controller, encoder);
+                await streamFromOpenAI(input, request, controller, encoder);
             } catch (error) {
                 if ((error as Error).name !== "AbortError") {
                     enqueueEvent(controller, encoder, "error", STREAM_ERROR_MARKER);
