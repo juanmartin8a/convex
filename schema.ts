@@ -59,4 +59,4 @@ export default defineSchema({
         ipa: v.string(),
     })
         .index("by_source_entry_target", ["source_language_code", "entry_id", "target_language_code"])
-});
+})
