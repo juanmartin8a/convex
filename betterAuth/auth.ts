@@ -7,8 +7,8 @@ import { components } from "../_generated/api";
 import type { DataModel } from "../_generated/dataModel";
 import authConfig from "../auth.config";
 import schema from "./schema";
-import { expo } from "@better-auth/expo";
 import { sendEmail } from "../sendEmail";
+import { expo } from "@better-auth/expo";
 
 // Better Auth Component
 export const authComponent = createClient<DataModel, typeof schema>(
@@ -22,14 +22,12 @@ export const authComponent = createClient<DataModel, typeof schema>(
 // Better Auth Options
 export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
     return {
+        advanced: {},
         appName: process.env.APP_NAME,
-        baseURL: process.env.SITE_URL,
+        baseURL: process.env.CONVEX_SITE_URL,
         secret: process.env.BETTER_AUTH_SECRET,
-        database: authComponent.adapter(ctx),
-        logger: {
-            disabled: false,
-        },
         trustedOrigins: ["sapo://", "https://appleid.apple.com"],
+        database: authComponent.adapter(ctx),
         user: {
             deleteUser: {
                 enabled: true,
@@ -61,8 +59,9 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
             },
         },
         plugins: [
+            // The Expo and Convex plugins are required
             expo(),
-            convex({ authConfig })
+            convex({ authConfig }),
         ],
     } satisfies BetterAuthOptions;
 };
